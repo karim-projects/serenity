@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serenity Living — Arbres Décisionnels</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --terra: #B5622E;
+    --terra-dark: #8C4820;
+    --terra-light: #F2E0D0;
+    --terra-mid: #DCA882;
+    --brun: #5C3317;
+    --beige: #EDE0C8;
+    --cream: #FAF7F2;
+    --white: #FFFFFF;
+    --green: #2D7A4F;
+    --green-light: #E8F5EE;
+    --red: #C0392B;
+    --red-light: #FDECEA;
+    --shadow: 0 2px 12px rgba(92,51,23,0.10);
+    --shadow-lg: 0 8px 32px rgba(92,51,23,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--brun);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--brun);
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-title {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--cream);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .header-sub {
+    color: var(--terra-mid);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .badge {
+    background: var(--terra);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    background: var(--white);
+    border-bottom: 2px solid var(--beige);
+    overflow-x: auto;
+    position: sticky;
+    top: 61px;
+    z-index: 99;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 12px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #999;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    white-space: nowrap;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .tab-btn.active {
+    color: var(--terra);
+    border-bottom-color: var(--terra);
+    font-weight: 600;
+  }
+  .tab-btn .icon { margin-right: 5px; }
+
+  /* CONTENT */
+  .content { padding: 16px; max-width: 680px; margin: 0 auto; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* SITUATION BANNER */
+  .situation-banner {
+    background: var(--brun);
+    color: var(--cream);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .situation-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .situation-text strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .situation-text span {
+    font-size: 12px;
+    color: var(--terra-mid);
+  }
+
+  /* STEP CARD */
+  .step-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--terra);
+    position: relative;
+  }
+  .step-card.green { border-left-color: var(--green); }
+  .step-card.grey { border-left-color: #CCC; }
+
+  .step-number {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--terra);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .step-card.green .step-number { color: var(--green); }
+
+  .step-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--brun);
+    margin-bottom: 8px;
+  }
+
+  /* SCRIPT BUBBLE */
+  .script-bubble {
+    background: var(--terra-light);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--brun);
+    font-style: italic;
+    border-left: 3px solid var(--terra);
+    position: relative;
+  }
+  .script-bubble::before {
+    content: '💬';
+    position: absolute;
+    top: -8px;
+    left: 12px;
+    font-size: 14px;
+    font-style: normal;
+  }
+  .script-bubble.green-bubble {
+    background: var(--green-light);
+    border-left-color: var(--green);
+  }
+  .script-bubble.green-bubble::before { content: '✅'; }
+
+  /* QUESTION LIST */
+  .question-list {
+    list-style: none;
+    margin: 8px 0;
+  }
+  .question-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--cream);
+    border-radius: 8px;
+    margin-bottom: 6px;
+    font-size: 13px;
+    line-height: 1.5;
+    font-style: italic;
+    color: var(--brun);
+  }
+  .question-list li::before {
+    content: '→';
+    color: var(--terra);
+    font-weight: 700;
+    font-style: normal;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ARROW */
+  .arrow {
+    text-align: center;
+    color: var(--terra);
+    font-size: 20px;
+    margin: 4px 0;
+  }
+
+  /* BRANCH */
+  .branch-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 10px 0;
+  }
+  .branch-card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .branch-card:active { transform: scale(0.97); }
+  .branch-card.yes { border-color: var(--green); }
+  .branch-card.no { border-color: #E0C8A8; }
+  .branch-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .branch-card.yes .branch-label { color: var(--green); }
+  .branch-card.no .branch-label { color: var(--terra); }
+  .branch-text {
+    font-size: 12px;
+    color: var(--brun);
+    line-height: 1.4;
+  }
+
+  /* OBJECTION CARD */
+  .objection-card {
+    background: var(--white);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .objection-header {
+    background: var(--red-light);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .objection-header span {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--red);
+    flex: 1;
+    font-style: italic;
+  }
+  .objection-header .chevron {
+    color: var(--red);
+    font-size: 12px;
+    transition: transform 0.2s;
+  }
+  .objection-body {
+    display: none;
+    padding: 12px 16px;
+    background: var(--cream);
+  }
+  .objection-body.open { display: block; }
+  .objection-card.open .chevron { transform: rotate(180deg); }
+
+  /* CONFIRM MSG */
+  .confirm-msg {
+    background: var(--green-light);
+    border: 1px solid var(--green);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin: 8px 0;
+    font-size: 13px;
+    color: var(--green);
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .confirm-msg strong {
+    display: block;
+    font-style: normal;
+    margin-bottom: 4px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* ACTION TAG */
+  .action-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--terra);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin: 4px 4px 4px 0;
+    letter-spacing: 0.3px;
+  }
+  .action-tag.green-tag { background: var(--green); }
+  .action-tag.grey-tag { background: #888; }
+
+  /* INFO BOX */
+  .info-box {
+    background: var(--beige);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin: 10px 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--brun);
+  }
+  .info-box strong {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--terra);
+    margin-bottom: 6px;
+  }
+
+  /* DIVIDER */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--beige);
+  }
+  .divider span {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--terra-mid);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* CASE SELECTOR */
+  .case-selector {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .case-btn {
+    flex: 1;
+    min-width: 100px;
+    padding: 10px 8px;
+    border-radius: 10px;
+    border: 2px solid var(--beige);
+    background: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #999;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .case-btn .case-icon { font-size: 18px; display: block; margin-bottom: 4px; }
+  .case-btn.active {
+    border-color: var(--terra);
+    color: var(--terra);
+    background: var(--terra-light);
+  }
+
+  .case-content { display: none; }
+  .case-content.active { display: block; }
+
+  /* WHATSAPP TEMPLATE */
+  .wa-template {
+    background: #DCF8C6;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 10px 0;
+    position: relative;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #1a1a1a;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+  .wa-template::before {
+    content: 'WhatsApp';
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    color: #25D366;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .wa-copy-btn {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 8px;
+    background: #25D366;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* EXCEL REMINDER */
+  .excel-reminder {
+    background: var(--brun);
+    color: var(--cream);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 16px 0;
+  }
+  .excel-reminder strong {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--terra-mid);
+    margin-bottom: 8px;
+  }
+  .excel-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: 13px;
+  }
+  .excel-field:last-child { border-bottom: none; }
+  .excel-field::before { content: '☐'; color: var(--terra-mid); }
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">Serenity Living</div>
+    <div class="header-sub">Arbres Décisionnels · Fichier 1</div>
+  </div>
+  <div class="badge">Usage Interne</div>
+</div>
+
+<div class="nav-tabs">
+  <button class="tab-btn active" onclick="showTab('appel')"><span class="icon">📞</span>Appel</button>
+  <button class="tab-btn" onclick="showTab('whatsapp')"><span class="icon">💬</span>WhatsApp</button>
+  <button class="tab-btn" onclick="showTab('visite')"><span class="icon">🏠</span>Visite</button>
+  <button class="tab-btn" onclick="showTab('bureau')"><span class="icon">🏢</span>Bureau</button>
+  <button class="tab-btn" onclick="showTab('objections')"><span class="icon">🛡</span>Objections</button>
+  <button class="tab-btn" onclick="showTab('suivi')"><span class="icon">📋</span>Suivi</button>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════════════════════ APPEL ═══════════════════════════════════ -->
+<div class="section active" id="tab-appel">
+
+  <div class="situation-banner">
+    <div class="situation-icon">📞</div>
+    <div class="situation-text">
+      <strong>Appel entrant</strong>
+      <span>Décrocher dans les 3 sonneries. Toujours sourire avant de parler.</span>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-number">Étape 1 — Décrocher</div>
+    <div class="step-title">La phrase d'ouverture</div>
+    <div class="script-bubble">
+      "Serenity Living, bonjour — [Wahiba / Karim / Youssef] à l'appareil, je vous écoute."
+    </div>
+    <div class="info-box">
+      <strong>Règle</strong>
+      Ne pas interrompre. Laisser le client parler. Prendre des notes immédiatement.
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step-card grey">
+    <div class="step-number">Étape 2 — Identifier</div>
+    <div class="step-title">Qui est-il ?</div>
+    <div class="case-selector">
+      <button class="case-btn active" onclick="showCase('appel', 'acheteur')">
+        <span class="case-icon">🔍</span>Acheteur / Locataire
+      </button>
+      <button class="case-btn" onclick="showCase('appel', 'proprio')">
+        <span class="case-icon">🏠</span>Propriétaire
+      </button>
+      <button class="case-btn" onclick="showCase('appel', 'curieux')">
+        <span class="case-icon">❓</span>Curieux
+      </button>
+    </div>
+
+    <!-- CAS ACHETEUR -->
+    <div class="case-content active" id="appel-acheteur">
+      <div class="step-number" style="margin-top:8px">CAS — ACHETEUR / LOCATAIRE</div>
+
+      <div class="step-card" style="margin:8px 0; box-shadow:none; background:var(--cream);">
+        <div class="step-number">Questions de qualification</div>
+        <ul class="question-list">
+          <li>"Vous cherchez plutôt pour acheter ou louer ?"</li>
+          <li>"Dans quels quartiers idéalement ?"</li>
+          <li>"Quel budget vous avez prévu ?"</li>
+          <li>"Appartement, villa, terrain, bureau ?"</li>
+          <li>"Combien de chambres minimum ?"</li>
+          <li>"Des critères importants ? Terrasse, parking, piscine…"</li>
+        </ul>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <div class="step-card" style="margin:8px 0; box-shadow:none; background:var(--cream);">
+        <div class="step-number">Validation</div>
+        <div class="script-bubble">
+          "Très bien, je vois exactement le type de bien que vous cherchez."
+        </div>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <div class="branch-container">
+        <div class="branch-card yes">
+          <div class="branch-label">✓ Bien dispo</div>
+          <div class="branch-text">Proposer une visite immédiatement</div>
+        </div>
+        <div class="branch-card no">
+          <div class="branch-label">→ Pas encore</div>
+          <div class="branch-text">Garder le lead, rappeler au lancement</div>
+        </div>
+      </div>
+
+      <div class="script-bubble" style="margin-top:10px">
+        SI bien disponible :<br><br>
+        "Je pense qu'on a quelques biens qui pourraient vous intéresser. On peut organiser une visite — vous êtes disponible quand ?"
+      </div>
+      <div class="script-bubble">
+        SI pas encore :<br><br>
+        "Je note votre recherche et je vous contacte dès qu'un bien correspondant arrive."
+      </div>
+    </div>
+
+    <!-- CAS PROPRIO -->
+    <div class="case-content" id="appel-proprio">
+      <div class="step-number" style="margin-top:8px">CAS — PROPRIÉTAIRE</div>
+
+      <div class="step-card" style="margin:8px 0; box-shadow:none; background:var(--cream);">
+        <div class="step-number">Questions de qualification</div>
+        <ul class="question-list">
+          <li>"Vous souhaitez vendre ou louer ?"</li>
+          <li>"Quel type de bien ?"</li>
+          <li>"Dans quel quartier ?"</li>
+          <li>"Quelle surface environ ?"</li>
+          <li>"Combien de chambres ?"</li>
+          <li>"Quel prix vous envisagez ?"</li>
+        </ul>
+      </div>
+
+      <div class="arrow">↓</div>
+
+      <div class="script-bubble">
+        "Très bien. La prochaine étape serait qu'on organise une visite du bien pour faire une estimation sérieuse. Vous êtes disponible plutôt cette semaine ou la semaine prochaine ?"
+      </div>
+
+      <div class="info-box" style="margin-top:10px">
+        <strong>À mettre en avant</strong>
+        Photos pro · Vidéo · Visite 3D · Diffusion multi-plateformes · Mandat exclusif = investissement marketing
+      </div>
+    </div>
+
+    <!-- CAS CURIEUX -->
+    <div class="case-content" id="appel-curieux">
+      <div class="step-number" style="margin-top:8px">CAS — CLIENT CURIEUX</div>
+      <div class="script-bubble">
+        "Vous cherchez plutôt à acheter, louer ou vous souhaitez vendre un bien ?"
+      </div>
+      <div class="arrow">↓</div>
+      <div class="info-box">
+        <strong>Ensuite</strong>
+        Basculer vers l'arbre Acheteur ou Propriétaire selon la réponse.
+      </div>
+      <div class="script-bubble">
+        Présenter l'agence si nécessaire :<br><br>
+        "Serenity Living, c'est une agence immobilière basée à Rabat — 24 Rue Jabal Toubkal en Agdal. On couvre tout le couloir Rabat–Casablanca. Ce qui nous distingue : chaque bien est vérifié juridiquement avant d'être publié. On ouvre / on est ouverts depuis peu."
+      </div>
+    </div>
+
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step-card green">
+    <div class="step-number">Toujours — Collecte</div>
+    <div class="step-title">Avant de raccrocher</div>
+    <ul class="question-list">
+      <li>"Je peux noter votre prénom ?"</li>
+      <li>"Et votre numéro WhatsApp ?"</li>
+      <li>"Je peux aussi noter votre email ?"</li>
+    </ul>
+    <div class="excel-reminder">
+      <strong>📊 Entrer dans le fichier Clients maintenant</strong>
+      <div class="excel-field">Prénom & Nom</div>
+      <div class="excel-field">Téléphone / WhatsApp</div>
+      <div class="excel-field">Type : Acheteur / Locataire / Propriétaire</div>
+      <div class="excel-field">Quartier souhaité</div>
+      <div class="excel-field">Budget approximatif</div>
+      <div class="excel-field">Date d'appel + Notes</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step-card green">
+    <div class="step-number">Toujours — Clôture</div>
+    <div class="step-title">Finir sur du concret</div>
+    <div class="script-bubble green-bubble">
+      "Parfait. Je vous envoie un message WhatsApp de suite pour rester en contact. Très bonne journée — et merci de nous avoir contactés."
+    </div>
+    <div class="confirm-msg">
+      <strong>Message WhatsApp à envoyer dans les 2h</strong>
+      "Bonjour [Prénom], c'est [Wahiba / Karim / Youssef] de Serenity Living. Ravi(e) d'avoir échangé avec vous. Je reste disponible pour toute question. À très bientôt 🤝"
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════ WHATSAPP ═══════════════════════════════════ -->
+<div class="section" id="tab-whatsapp">
+
+  <div class="situation-banner">
+    <div class="situation-icon">💬</div>
+    <div class="situation-text">
+      <strong>Message WhatsApp entrant</strong>
+      <span>Répondre dans les 30 minutes maximum. Toujours rester professionnel.</span>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-number">Étape 1 — Identifier</div>
+    <div class="step-title">Lire le message, déterminer le profil</div>
+    <div class="case-selector">
+      <button class="case-btn active" onclick="showCase('wa', 'acheteur')">
+        <span class="case-icon">🔍</span>Acheteur
+      </button>
+      <button class="case-btn" onclick="showCase('wa', 'proprio')">
+        <span class="case-icon">🏠</span>Propriétaire
+      </button>
+      <button class="case-btn" onclick="showCase('wa', 'visite')">
+        <span class="case-icon">📅</span>Demande visite
+      </button>
+    </div>
+
+    <!-- WA ACHETEUR -->
+    <div class="case-content active" id="wa-acheteur">
+      <div class="wa-template">
+        "Bonjour [Prénom], merci pour votre message 😊<br><br>
+        Pour mieux vous aider — vous cherchez à acheter ou à louer ?"
+      </div>
+      <div class="arrow">↓</div>
+      <ul class="question-list" style="margin-top:8px">
+        <li>"Dans quel quartier idéalement ?"</li>
+        <li>"Quel budget environ ?"</li>
+        <li>"Type de bien : appartement, villa…?"</li>
+      </ul>
+      <div class="arrow">↓</div>
+      <div class="wa-template">
+        "Parfait. Je regarde ce qu'on a qui correspond et je reviens vers vous."
+      </div>
+    </div>
+
+    <!-- WA PROPRIO -->
+    <div class="case-content" id="wa-proprio">
+      <div class="wa-template">
+        "Bonjour [Prénom], merci pour votre message 😊<br><br>
+        Vous souhaitez vendre ou louer votre bien ?"
+      </div>
+      <div class="arrow">↓</div>
+      <ul class="question-list" style="margin-top:8px">
+        <li>"Il se situe dans quel quartier ?"</li>
+        <li>"Quel type de bien ?"</li>
+        <li>"Vous avez une idée du prix ?"</li>
+      </ul>
+      <div class="arrow">↓</div>
+      <div class="wa-template">
+        "On peut organiser une visite pour faire une estimation sérieuse. Vous êtes disponible quand ?"
+      </div>
+    </div>
+
+    <!-- WA VISITE -->
+    <div class="case-content" id="wa-visite">
+      <div class="wa-template">
+        "Bien sûr ! Vous êtes disponible quand pour une visite ?"
+      </div>
+      <div class="arrow">↓</div>
+      <div class="wa-template">
+        "Je vous propose [Jour] à [Heure] ou [Jour] à [Heure]. L'un ou l'autre vous convient ?"
+      </div>
+      <div class="arrow">↓</div>
+      <div class="confirm-msg">
+        <strong>Confirmation à envoyer</strong>
+        "Parfait ✅ Je vous confirme la visite du bien à [Quartier] le [Jour] à [Heure]. À bientôt !"
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-top:16px">
+    <strong>Règles WhatsApp Serenity Living</strong>
+    ✔ Répondre dans les 30 min en heures ouvrées<br>
+    ✔ Toujours commencer par le prénom du client<br>
+    ✔ Maximum 1 emoji par message<br>
+    ✔ Écrire correctement, sans abréviations<br>
+    ✔ Messages courts et directs<br>
+    ❌ Jamais envoyer une liste de biens sans qualification préalable<br>
+    ❌ Jamais transmettre un numéro propriétaire
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════ VISITE ═══════════════════════════════════ -->
+<div class="section" id="tab-visite">
+
+  <div class="situation-banner">
+    <div class="situation-icon">🏠</div>
+    <div class="situation-text">
+      <strong>Visite physique</strong>
+      <span>Toujours arriver 10 min en avance. Connaître le bien par cœur.</span>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-number">Avant la visite — Checklist</div>
+    <div class="step-title">Se préparer</div>
+    <div class="info-box">
+      <strong>Vérifier avant de partir</strong>
+      ☐ Budget client confirmé ?<br>
+      ☐ Quartier correspond ?<br>
+      ☐ Type de bien correspond ?<br>
+      ☐ Informations du bien maîtrisées ?<br>
+      ☐ Prix, surface, étage, charges ?<br>
+      ☐ Situation juridique du bien ?<br>
+      ☐ Téléphone chargé, agenda à jour ?
+    </div>
+    <div class="confirm-msg">
+      <strong>Message de confirmation à envoyer la veille</strong>
+      "Bonjour [Prénom], je vous confirme notre visite demain à [Heure] — [Adresse du bien]. À demain !"
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step-card">
+    <div class="step-number">Étape 1 — Accueil</div>
+    <div class="step-title">Ouverture de la visite</div>
+    <div class="script-bubble">
+      "Merci d'être venu(e). Avant de commencer, je vous rappelle rapidement les caractéristiques du bien — [surface, chambres, étage, prix]. On y va ?"
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step-card">
+    <div class="step-number">Étape 2 — Pendant</div>
+    <div class="step-title">Laisser vivre le bien</div>
+    <div class="info-box">
+      <strong>Règles pendant la visite</strong>
+      ✔ Laisser le client explorer à son rythme<br>
+      ✔ Observer les réactions sans commenter<br>
+      ✔ Répondre aux questions avec précision<br>
+      ✔ Ne pas surparler — le silence est normal<br>
+      ❌ Ne jamais forcer une réaction positive
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step-card">
+    <div class="step-number">Étape 3 — Question clé</div>
+    <div class="step-title">Après la visite des pièces</div>
+    <div class="script-bubble">
+      "Comment vous vous projetez dans ce bien ?"
+    </div>
+    <div class="info-box" style="margin-top:10px">
+      <strong>Selon la réponse</strong>
+    </div>
+    <div class="branch-container">
+      <div class="branch-card yes">
+        <div class="branch-label">✓ Intérêt</div>
+        <div class="branch-text">Proposer 2e visite ou avancer vers une offre</div>
+      </div>
+      <div class="branch-card no">
+        <div class="branch-label">→ Hésitation</div>
+        <div class="branch-text">Poser la question suivante</div>
+      </div>
+    </div>
+    <div class="script-bubble" style="margin-top:8px">
+      Si hésitation :<br><br>
+      "Qu'est-ce qui vous ferait hésiter ?"
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step-card green">
+    <div class="step-number">Étape 4 — Clôture visite</div>
+    <div class="step-title">Toujours finir sur du concret</div>
+    <div class="script-bubble green-bubble">
+      Si intéressé : "On peut organiser une seconde visite ou je vous prépare un dossier complet. Qu'est-ce qui vous convient le mieux ?"
+    </div>
+    <div class="script-bubble">
+      Si pas convaincu : "Pas de problème. Je note vos retours et je vous propose autre chose qui correspond mieux."
+    </div>
+    <div class="confirm-msg" style="margin-top:10px">
+      <strong>Message WhatsApp post-visite (dans les 2h)</strong>
+      "Bonjour [Prénom], merci pour votre visite aujourd'hui. N'hésitez pas si vous avez des questions. Je reste disponible 🤝"
+    </div>
+  </div>
+
+  <div class="divider"><span>Client MRE à distance</span></div>
+
+  <div class="step-card">
+    <div class="step-number">Visite à distance — MRE</div>
+    <div class="step-title">Protocole client hors Maroc</div>
+    <div class="info-box">
+      <strong>Ce qu'on propose</strong>
+      ✔ Visite vidéo en direct (WhatsApp / Zoom)<br>
+      ✔ Compte rendu photos détaillé envoyé après<br>
+      ✔ Accès visite virtuelle 3D sur le site<br>
+      ✔ Vérification juridique complète<br>
+      ✔ Présence chez le notaire par procuration
+    </div>
+    <div class="script-bubble">
+      "Pas besoin d'être sur place pour avancer sérieusement. On organise une visite vidéo en direct — vous verrez le bien en temps réel et je réponds à toutes vos questions."
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════ BUREAU ═══════════════════════════════════ -->
+<div class="section" id="tab-bureau">
+
+  <div class="situation-banner">
+    <div class="situation-icon">🏢</div>
+    <div class="situation-text">
+      <strong>Visite au bureau</strong>
+      <span>24 Rue Jabal Toubkal, Agdal · Toujours soigné(e) et disponible</span>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-number">Étape 1 — Accueil</div>
+    <div class="step-title">Dès l'entrée</div>
+    <div class="info-box">
+      <strong>Réflexes obligatoires</strong>
+      ✔ Se lever pour accueillir<br>
+      ✔ Proposer café ou eau immédiatement<br>
+      ✔ Installer dans un espace confortable<br>
+      ✔ Téléphone retourné — attention totale au client
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step-card">
+    <div class="step-number">Étape 2 — Écoute</div>
+    <div class="step-title">Comprendre le projet</div>
+    <div class="script-bubble">
+      "Je vous écoute — parlez-moi de votre projet."
+    </div>
+    <div class="info-box" style="margin-top:10px">
+      <strong>Laisser parler 2 à 3 minutes sans interrompre</strong>
+      Prendre des notes visibles — ça rassure. Poser ensuite les questions de qualification selon le profil.
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step-card">
+    <div class="step-number">Étape 3 — Présentation</div>
+    <div class="step-title">Montrer les biens correspondants</div>
+    <div class="info-box">
+      <strong>Règle</strong>
+      Présenter 2 à 3 biens maximum. Pas plus. Choisir avec soin avant de montrer.
+    </div>
+    <div class="script-bubble">
+      "On a quelques biens qui correspondent à ce que vous cherchez. Je vous en montre deux ou trois — je préfère vous présenter peu de biens mais les bons."
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step-card green">
+    <div class="step-number">Étape 4 — Prochaine étape</div>
+    <div class="step-title">Ne jamais laisser partir sans un concret</div>
+    <div class="script-bubble green-bubble">
+      "On organise une visite cette semaine ? Ou vous préférez qu'on vous envoie un dossier complet sur ces biens d'abord ?"
+    </div>
+    <div class="confirm-msg" style="margin-top:10px">
+      <strong>Avant de partir</strong>
+      Remettre une carte de visite. Envoyer un message WhatsApp dans les 30 min.
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════ OBJECTIONS ═══════════════════════════════════ -->
+<div class="section" id="tab-objections">
+
+  <div class="situation-banner">
+    <div class="situation-icon">🛡</div>
+    <div class="situation-text">
+      <strong>Gestion des objections</strong>
+      <span>Toujours écouter, valider, répondre. Ne jamais défendre ni argumenter.</span>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-bottom:16px">
+    <strong>Méthode en 3 temps</strong>
+    1. Écouter sans interrompre<br>
+    2. Valider ("Je comprends tout à fait")<br>
+    3. Répondre calmement avec un fait ou une question
+  </div>
+
+  <div class="objection-card" onclick="toggleObj(this)">
+    <div class="objection-header">
+      <span>"Vous n'êtes pas encore ouverts / vous êtes nouveaux"</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="objection-body">
+      <div class="script-bubble green-bubble">
+        "C'est exact — et c'est justement pour ça qu'on a pris le temps de bien faire les choses avant de se lancer. Chaque bien qu'on publie est visité et vérifié par notre équipe avant d'apparaître sur le site. C'est ça notre différence."
+      </div>
+    </div>
+  </div>
+
+  <div class="objection-card" onclick="toggleObj(this)">
+    <div class="objection-header">
+      <span>"Vous avez des biens à me montrer maintenant ?"</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="objection-body">
+      <div class="script-bubble green-bubble">
+        "Oui — nos biens sont sur le site. Et si vous ne trouvez pas exactement ce que vous cherchez, je note votre profil et je vous contacte dès qu'un bien correspondant arrive."
+      </div>
+    </div>
+  </div>
+
+  <div class="objection-card" onclick="toggleObj(this)">
+    <div class="objection-header">
+      <span>"Pourquoi je passerais par une agence ?"</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="objection-body">
+      <div class="script-bubble green-bubble">
+        "Notre rôle c'est surtout de vous faire gagner du temps. On vérifie les aspects juridiques, on négocie pour vous, et on vous accompagne jusqu'à la remise des clés. Vous n'avez pas à gérer la complexité — c'est notre travail."
+      </div>
+    </div>
+  </div>
+
+  <div class="objection-card" onclick="toggleObj(this)">
+    <div class="objection-header">
+      <span>"C'est combien votre commission ?"</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="objection-body">
+      <div class="script-bubble green-bubble">
+        "Nos honoraires dépendent du type de transaction et du prix du bien — on en discute clairement lors de notre premier rendez-vous. Pas de frais cachés, pas de surprise."
+      </div>
+    </div>
+  </div>
+
+  <div class="objection-card" onclick="toggleObj(this)">
+    <div class="objection-header">
+      <span>"Je veux d'abord chercher seul et je reviendrai"</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="objection-body">
+      <div class="script-bubble green-bubble">
+        "Bien sûr, pas de problème. Ce que je vous propose c'est juste de noter vos critères maintenant — comme ça si on trouve quelque chose qui correspond, je vous contacte directement. Ça ne vous engage à rien."
+      </div>
+    </div>
+  </div>
+
+  <div class="objection-card" onclick="toggleObj(this)">
+    <div class="objection-header">
+      <span>"Le prix est trop élevé"</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="objection-body">
+      <div class="script-bubble green-bubble">
+        "Je comprends. Quel est le budget maximum avec lequel vous seriez à l'aise ?"
+      </div>
+      <div class="info-box" style="margin-top:8px">
+        <strong>Ensuite</strong>
+        Ne jamais promettre une baisse de prix. Proposer un autre bien dans le budget, ou expliquer les éléments qui justifient le prix (emplacement, état, juridique propre).
+      </div>
+    </div>
+  </div>
+
+  <div class="objection-card" onclick="toggleObj(this)">
+    <div class="objection-header">
+      <span>"Je travaille déjà avec une autre agence"</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="objection-body">
+      <div class="script-bubble green-bubble">
+        "Pas de problème du tout. Ce n'est pas exclusif de votre côté — et notre sélection est différente. Ça ne coûte rien de rester en contact."
+      </div>
+      <div class="info-box" style="margin-top:8px">
+        <strong>Important</strong>
+        Ne jamais critiquer l'autre agence. Jamais.
+      </div>
+    </div>
+  </div>
+
+  <div class="objection-card" onclick="toggleObj(this)">
+    <div class="objection-header">
+      <span>"Rappelez-moi quand vous avez quelque chose"</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="objection-body">
+      <div class="script-bubble green-bubble">
+        "Bien sûr. Je note votre numéro et je vous rappelle personnellement. Vous préférez qu'on vous contacte en début de semaine ou plutôt en fin de semaine ?"
+      </div>
+      <div class="info-box" style="margin-top:8px">
+        <strong>Astuce</strong>
+        Toujours donner le choix — ça engage le client et donne une date concrète.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════ SUIVI ═══════════════════════════════════ -->
+<div class="section" id="tab-suivi">
+
+  <div class="situation-banner">
+    <div class="situation-icon">📋</div>
+    <div class="situation-text">
+      <strong>Suivi des leads</strong>
+      <span>Chaque contact = une entrée dans le fichier. Toujours, sans exception.</span>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-number">Après chaque appel / contact</div>
+    <div class="step-title">Entrée obligatoire dans le fichier Clients</div>
+    <div class="excel-reminder">
+      <strong>📊 Fichier Clients — Colonnes à remplir</strong>
+      <div class="excel-field">Date d'entrée</div>
+      <div class="excel-field">Prénom & Nom</div>
+      <div class="excel-field">Téléphone / WhatsApp</div>
+      <div class="excel-field">Email</div>
+      <div class="excel-field">Source (bouche à oreille, site, réseau…)</div>
+      <div class="excel-field">Transaction : Achat / Location / Vente</div>
+      <div class="excel-field">Budget</div>
+      <div class="excel-field">Quartier souhaité</div>
+      <div class="excel-field">Type de bien</div>
+      <div class="excel-field">Statut (Nouveau / Contacté / Chaud / Visite…)</div>
+      <div class="excel-field">Date dernier contact</div>
+      <div class="excel-field">Date relance prévue</div>
+      <div class="excel-field">Notes</div>
+    </div>
+  </div>
+
+  <div class="step-card" style="margin-top:10px">
+    <div class="step-number">Objectifs hebdomadaires</div>
+    <div class="step-title">Par consultant</div>
+    <div class="info-box">
+      <strong>Chaque semaine</strong>
+      ☐ 10 leads qualifiés (acheteurs/locataires)<br>
+      ☐ 10 propriétaires contactés<br>
+      ☐ 5 visites organisées<br>
+      ☐ 1 à 2 mandats signés
+    </div>
+  </div>
+
+  <div class="step-card" style="margin-top:10px">
+    <div class="step-number">Relances</div>
+    <div class="step-title">Ne jamais laisser un lead sans suivi</div>
+    <div class="info-box">
+      <strong>Règle de relance</strong>
+      Lead Nouveau → rappeler sous 48h<br>
+      Lead Contacté → relancer sous 7 jours<br>
+      Lead Chaud → suivre tous les 2-3 jours<br>
+      Lead Froid → message WhatsApp mensuel
+    </div>
+    <div class="wa-template" style="margin-top:10px">
+      Message de relance douce :<br><br>
+      "Bonjour [Prénom], c'est [Nom] de Serenity Living. On a de nouveaux biens qui pourraient vous intéresser à [Quartier]. Je vous envoie ça ?"
+    </div>
+  </div>
+
+</div>
+
+</div><!-- end content -->
+
+<script>
+function showTab(tab) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.closest('.tab-btn').classList.add('active');
+}
+
+function showCase(section, cas) {
+  const parent = event.target.closest('.step-card') || event.target.closest('.section');
+  const buttons = event.target.closest('.case-selector').querySelectorAll('.case-btn');
+  const contents = event.target.closest('.step-card').querySelectorAll('.case-content');
+  buttons.forEach(b => b.classList.remove('active'));
+  contents.forEach(c => c.classList.remove('active'));
+  event.target.closest('.case-btn').classList.add('active');
+  const target = document.getElementById(section + '-' + cas);
+  if (target) target.classList.add('active');
+}
+
+function toggleObj(card) {
+  const body = card.querySelector('.objection-body');
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.objection-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.objection-card').forEach(c => c.classList.remove('open'));
+  if (!isOpen) {
+    body.classList.add('open');
+    card.classList.add('open');
+  }
+}
+</script>
+</body>
+</html>
