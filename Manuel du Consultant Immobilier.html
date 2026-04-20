@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serenity Living — Manuel Consultant</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --terra: #B5622E;
+    --terra-dark: #8C4820;
+    --terra-light: #F2E0D0;
+    --terra-mid: #DCA882;
+    --brun: #5C3317;
+    --beige: #EDE0C8;
+    --cream: #FAF7F2;
+    --white: #FFFFFF;
+    --green: #2D7A4F;
+    --green-light: #E8F5EE;
+    --red: #C0392B;
+    --red-light: #FDECEA;
+    --shadow: 0 2px 12px rgba(92,51,23,0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--brun);
+    min-height: 100vh;
+  }
+
+  .header {
+    background: var(--terra);
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-title {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--white);
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .header-sub {
+    color: rgba(255,255,255,0.7);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .badge {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .nav-tabs {
+    display: flex;
+    background: var(--white);
+    border-bottom: 2px solid var(--beige);
+    overflow-x: auto;
+    position: sticky;
+    top: 61px;
+    z-index: 99;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 12px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #999;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    color: var(--terra);
+    border-bottom-color: var(--terra);
+    font-weight: 600;
+  }
+
+  .content { padding: 16px; max-width: 680px; margin: 0 auto; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* SECTION HEADER */
+  .section-header {
+    margin-bottom: 16px;
+  }
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--terra);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--brun);
+    line-height: 1.2;
+  }
+
+  /* PHRASE CARD */
+  .phrase-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+  }
+  .phrase-context {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--terra);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .phrase-text {
+    font-size: 15px;
+    font-style: italic;
+    color: var(--brun);
+    line-height: 1.6;
+    border-left: 3px solid var(--terra);
+    padding-left: 12px;
+  }
+  .phrase-why {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #888;
+    line-height: 1.5;
+  }
+
+  /* RULE CARD */
+  .rule-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+  }
+  .rule-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--brun);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* DO/DON'T */
+  .do-dont-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .do-col, .dont-col {
+    border-radius: 10px;
+    padding: 12px;
+  }
+  .do-col { background: var(--green-light); border: 1px solid rgba(45,122,79,0.2); }
+  .dont-col { background: var(--red-light); border: 1px solid rgba(192,57,43,0.2); }
+  .col-header {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .do-col .col-header { color: var(--green); }
+  .dont-col .col-header { color: var(--red); }
+  .col-item {
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    color: var(--brun);
+  }
+  .col-item:last-child { border-bottom: none; }
+
+  /* BIG RULE */
+  .big-rule {
+    background: var(--brun);
+    color: var(--cream);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .big-rule::before {
+    content: '⚠';
+    position: absolute;
+    right: 16px;
+    top: 12px;
+    font-size: 32px;
+    opacity: 0.15;
+  }
+  .big-rule-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--terra-mid);
+    margin-bottom: 8px;
+  }
+  .big-rule-item {
+    font-size: 13px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+  .big-rule-item:last-child { border-bottom: none; }
+  .big-rule-item::before {
+    content: '❌';
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* STANDARD CARD */
+  .standard-card {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+  }
+  .standard-header {
+    background: var(--beige);
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--brun);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .standard-header .chevron {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--terra);
+    transition: transform 0.2s;
+  }
+  .standard-body {
+    display: none;
+    padding: 14px 16px;
+  }
+  .standard-body.open { display: block; }
+  .standard-card.open .chevron { transform: rotate(180deg); }
+
+  .standard-item {
+    font-size: 13px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--beige);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+    color: var(--brun);
+  }
+  .standard-item:last-child { border-bottom: none; }
+  .standard-item.green::before { content: '✔'; color: var(--green); flex-shrink: 0; }
+  .standard-item.red::before { content: '❌'; flex-shrink: 0; }
+
+  /* POSITIONING BLOCK */
+  .positioning-block {
+    background: var(--terra);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 10px;
+    color: white;
+  }
+  .positioning-block .pb-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .pb-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .pb-point:last-child { border-bottom: none; }
+  .pb-point::before { content: '✦'; color: var(--terra-light); flex-shrink: 0; margin-top: 2px; }
+
+  /* COMPARE TABLE */
+  .compare-table {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-bottom: 10px;
+  }
+  .compare-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--beige);
+  }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row.header {
+    background: var(--brun);
+  }
+  .compare-cell {
+    padding: 10px 14px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--brun);
+  }
+  .compare-row.header .compare-cell {
+    color: white;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  .compare-cell.bad { color: var(--red); font-style: italic; }
+  .compare-cell.good { color: var(--green); font-weight: 500; }
+
+  /* ATTITUDE METER */
+  .attitude-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .attitude-emoji { font-size: 32px; flex-shrink: 0; }
+  .attitude-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--brun);
+    margin-bottom: 3px;
+  }
+  .attitude-desc {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.4;
+  }
+  .attitude-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--beige);
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .attitude-fill {
+    height: 100%;
+    background: var(--terra);
+    border-radius: 2px;
+  }
+
+  /* KPI */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .kpi-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .kpi-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--terra);
+    line-height: 1;
+  }
+  .kpi-label {
+    font-size: 11px;
+    color: #888;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  .info-box {
+    background: var(--beige);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin: 10px 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--brun);
+  }
+  .info-box strong {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--terra);
+    margin-bottom: 6px;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--beige);
+  }
+  .divider span {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--terra-mid);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">Serenity Living</div>
+    <div class="header-sub">Manuel Consultant · Fichier 2</div>
+  </div>
+  <div class="badge">Usage Interne</div>
+</div>
+
+<div class="nav-tabs">
+  <button class="tab-btn active" onclick="showTab('attitude')">🧠 Attitude</button>
+  <button class="tab-btn" onclick="showTab('phrases')">💬 Phrases Clés</button>
+  <button class="tab-btn" onclick="showTab('interdits')">🚫 Interdits</button>
+  <button class="tab-btn" onclick="showTab('standards')">📐 Standards</button>
+  <button class="tab-btn" onclick="showTab('positionnement')">✦ Positionnement</button>
+  <button class="tab-btn" onclick="showTab('kpi')">📊 Objectifs</button>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════════════════════ ATTITUDE ═══════════════════════════════════ -->
+<div class="section active" id="tab-attitude">
+
+  <div class="section-header">
+    <div class="section-label">Fichier 2 · Section 1</div>
+    <div class="section-title">L'attitude d'un consultant Serenity Living</div>
+  </div>
+
+  <div class="info-box" style="margin-bottom:16px">
+    <strong>À retenir</strong>
+    Le client doit sentir une seule chose en raccrochant ou en quittant le bureau :<br>
+    <em>"Je suis entre de bonnes mains."</em>
+  </div>
+
+  <div class="attitude-card">
+    <div class="attitude-emoji">😌</div>
+    <div style="flex:1">
+      <div class="attitude-name">Calme</div>
+      <div class="attitude-desc">Ne jamais montrer de stress, d'urgence ou de précipitation. Le calme inspire confiance.</div>
+      <div class="attitude-bar"><div class="attitude-fill" style="width:100%"></div></div>
+    </div>
+  </div>
+
+  <div class="attitude-card">
+    <div class="attitude-emoji">🎯</div>
+    <div style="flex:1">
+      <div class="attitude-name">Posé et précis</div>
+      <div class="attitude-desc">Chaque réponse est réfléchie. On ne dit pas ce qu'on ne sait pas — on vérifie et on revient.</div>
+      <div class="attitude-bar"><div class="attitude-fill" style="width:100%"></div></div>
+    </div>
+  </div>
+
+  <div class="attitude-card">
+    <div class="attitude-emoji">🤝</div>
+    <div style="flex:1">
+      <div class="attitude-name">Humain et sincère</div>
+      <div class="attitude-desc">On parle à une personne, pas à un dossier. Sourire, écoute active, contact visuel.</div>
+      <div class="attitude-bar"><div class="attitude-fill" style="width:90%"></div></div>
+    </div>
+  </div>
+
+  <div class="attitude-card">
+    <div class="attitude-emoji">🔍</div>
+    <div style="flex:1">
+      <div class="attitude-name">Transparent</div>
+      <div class="attitude-desc">On dit la vérité sur les prix, les délais, les limites. Jamais de promesses qu'on ne peut pas tenir.</div>
+      <div class="attitude-bar"><div class="attitude-fill" style="width:100%"></div></div>
+    </div>
+  </div>
+
+  <div class="attitude-card">
+    <div class="attitude-emoji">🏛</div>
+    <div style="flex:1">
+      <div class="attitude-name">Professionnel</div>
+      <div class="attitude-desc">Tenue soignée, ponctualité, messages bien écrits, bureau rangé. Chaque détail compte.</div>
+      <div class="attitude-bar"><div class="attitude-fill" style="width:95%"></div></div>
+    </div>
+  </div>
+
+  <div class="divider"><span>Ce qu'on ne fait jamais</span></div>
+
+  <div class="big-rule">
+    <div class="big-rule-title">Attitudes interdites</div>
+    <div class="big-rule-item">Mettre de la pression pour accélérer une décision</div>
+    <div class="big-rule-item">Paraître désespéré de conclure</div>
+    <div class="big-rule-item">Promettre ce qu'on ne peut pas garantir</div>
+    <div class="big-rule-item">Critiquer la concurrence, un propriétaire ou un client précédent</div>
+    <div class="big-rule-item">Improviser sur les aspects juridiques ou financiers</div>
+    <div class="big-rule-item">Ignorer un message ou un appel plus de 30 min en heures ouvrées</div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════ PHRASES CLÉS ═══════════════════════════════════ -->
+<div class="section" id="tab-phrases">
+
+  <div class="section-header">
+    <div class="section-label">Fichier 2 · Section 2</div>
+    <div class="section-title">Phrases clés à utiliser</div>
+  </div>
+
+  <div class="info-box" style="margin-bottom:16px">
+    <strong>Comment utiliser cette section</strong>
+    Ces phrases ne sont pas des scripts à réciter — ce sont des formulations qui ont été choisies pour leur efficacité et leur cohérence avec l'image de Serenity Living. Les adapter naturellement selon le contexte.
+  </div>
+
+  <div class="divider"><span>Pour gagner la confiance</span></div>
+
+  <div class="phrase-card">
+    <div class="phrase-context">💬 Confiance</div>
+    <div class="phrase-text">"On préfère vous présenter peu de biens mais les bons."</div>
+    <div class="phrase-why">Positionne l'agence comme sélective, pas désespérée de placer n'importe quoi.</div>
+  </div>
+
+  <div class="phrase-card">
+    <div class="phrase-context">💬 Confiance</div>
+    <div class="phrase-text">"On vérifie toujours les aspects juridiques avant d'avancer."</div>
+    <div class="phrase-why">Rassure sur la sécurité de la transaction — peur numéro 1 au Maroc.</div>
+  </div>
+
+  <div class="phrase-card">
+    <div class="phrase-context">💬 Confiance</div>
+    <div class="phrase-text">"Je vais être honnête avec vous."</div>
+    <div class="phrase-why">Ouvre une vérité que le client va croire et retenir.</div>
+  </div>
+
+  <div class="divider"><span>Pour les acheteurs / locataires</span></div>
+
+  <div class="phrase-card">
+    <div class="phrase-context">🔍 Acheteur</div>
+    <div class="phrase-text">"Notre rôle, c'est surtout de vous faire gagner du temps."</div>
+    <div class="phrase-why">Justifie la valeur ajoutée de l'agence sans parler de commission.</div>
+  </div>
+
+  <div class="phrase-card">
+    <div class="phrase-context">🔍 Acheteur</div>
+    <div class="phrase-text">"Je note votre recherche et je vous contacte dès qu'un bien correspondant arrive."</div>
+    <div class="phrase-why">Transforme un non en engagement actif de l'agence.</div>
+  </div>
+
+  <div class="phrase-card">
+    <div class="phrase-context">🔍 Acheteur</div>
+    <div class="phrase-text">"Comment vous vous projetez dans ce bien ?"</div>
+    <div class="phrase-why">Question ouverte qui révèle le niveau d'intérêt sans créer de pression.</div>
+  </div>
+
+  <div class="divider"><span>Pour les propriétaires / vendeurs</span></div>
+
+  <div class="phrase-card">
+    <div class="phrase-context">🏠 Propriétaire</div>
+    <div class="phrase-text">"Un bien bien présenté attire toujours les bons acheteurs."</div>
+    <div class="phrase-why">Justifie l'investissement en photos/vidéo/3D sans paraître commercial.</div>
+  </div>
+
+  <div class="phrase-card">
+    <div class="phrase-context">🏠 Propriétaire</div>
+    <div class="phrase-text">"Votre timing est vraiment bon."</div>
+    <div class="phrase-why">Valorise le propriétaire et crée une dynamique positive dès l'ouverture.</div>
+  </div>
+
+  <div class="phrase-card">
+    <div class="phrase-context">🏠 Propriétaire</div>
+    <div class="phrase-text">"On commence par une estimation sérieuse — gratuite et sans engagement."</div>
+    <div class="phrase-why">Enlève la friction du premier pas. L'engagement arrive après.</div>
+  </div>
+
+  <div class="divider"><span>Pour conclure / avancer</span></div>
+
+  <div class="phrase-card">
+    <div class="phrase-context">✅ Clôture</div>
+    <div class="phrase-text">"On vous accompagne jusqu'à la remise des clés — et après."</div>
+    <div class="phrase-why">Différenciateur fort. "Et après" est inattendu et mémorable.</div>
+  </div>
+
+  <div class="phrase-card">
+    <div class="phrase-context">✅ Clôture</div>
+    <div class="phrase-text">"Vous préférez qu'on vous contacte en début ou en fin de semaine ?"</div>
+    <div class="phrase-why">Donne le choix — engage le client sans forcer. Toujours donner deux options.</div>
+  </div>
+
+  <div class="phrase-card">
+    <div class="phrase-context">✅ Clôture</div>
+    <div class="phrase-text">"Ça ne vous engage à rien — juste une conversation."</div>
+    <div class="phrase-why">Réduit la peur de l'engagement. Fonctionne particulièrement bien par WhatsApp.</div>
+  </div>
+
+  <div class="divider"><span>À ne jamais dire — avec alternative</span></div>
+
+  <div class="compare-table">
+    <div class="compare-row header">
+      <div class="compare-cell">❌ À éviter</div>
+      <div class="compare-cell">✅ Dire plutôt</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell bad">"C'est une affaire exceptionnelle"</div>
+      <div class="compare-cell good">"C'est un bien rare sur ce quartier"</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell bad">"Dépêchez-vous, ça part vite"</div>
+      <div class="compare-cell good">"Ce type de bien ne reste pas longtemps"</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell bad">"Prix négociable"</div>
+      <div class="compare-cell good">"Prix à discuter selon votre projet"</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell bad">"Appartement de luxe"</div>
+      <div class="compare-cell good">"Un appartement soigné, dans un quartier qui vous ressemble"</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell bad">"Contactez-nous maintenant"</div>
+      <div class="compare-cell good">"Parlez-nous de votre projet"</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell bad">"Je vous garantis que…"</div>
+      <div class="compare-cell good">"En général sur ce type de bien…"</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════ INTERDITS ═══════════════════════════════════ -->
+<div class="section" id="tab-interdits">
+
+  <div class="section-header">
+    <div class="section-label">Fichier 2 · Section 3</div>
+    <div class="section-title">Erreurs interdites</div>
+  </div>
+
+  <div class="info-box" style="margin-bottom:16px">
+    <strong>Règle absolue</strong>
+    Ces erreurs ne sont pas des "mauvaises pratiques". Ce sont des fautes professionnelles qui peuvent engager la responsabilité de l'agence ou détruire sa réputation.
+  </div>
+
+  <div class="big-rule">
+    <div class="big-rule-title">Interdits absolus — jamais, sous aucun prétexte</div>
+    <div class="big-rule-item">Promettre un prix de vente ou de location à un propriétaire</div>
+    <div class="big-rule-item">Promettre un délai de vente ou de location</div>
+    <div class="big-rule-item">Critiquer une autre agence, un concurrent ou un confrère</div>
+    <div class="big-rule-item">Envoyer un client visiter un bien seul, sans conseiller présent</div>
+    <div class="big-rule-item">Transmettre le numéro d'un propriétaire à un acheteur (et vice versa)</div>
+    <div class="big-rule-item">Mentir ou omettre volontairement une information sur un bien</div>
+    <div class="big-rule-item">Improviser sur les aspects juridiques ou fiscaux</div>
+    <div class="big-rule-item">Signer quoi que ce soit sans avoir consulté la direction</div>
+    <div class="big-rule-item">Discuter d'un dossier client dans un lieu public</div>
+    <div class="big-rule-item">Partager des informations sur un client ou un bien sur les réseaux personnels</div>
+  </div>
+
+  <div class="divider"><span>Situations piège</span></div>
+
+  <div class="standard-card" onclick="toggleStandard(this)">
+    <div class="standard-header">
+      ⚠️ "Pouvez-vous me donner le contact du propriétaire directement ?"
+      <span class="chevron">▼</span>
+    </div>
+    <div class="standard-body">
+      <div class="phrase-text" style="font-style:normal; font-size:13px; line-height:1.6; border-left:3px solid var(--red); padding-left:12px; color:var(--brun); margin-bottom:8px">
+        Refuser poliment, toujours. Expliquer que toutes les communications passent par l'agence pour protéger les deux parties.
+      </div>
+      <div class="phrase-card" style="box-shadow:none; background:var(--cream); padding:12px;">
+        <div class="phrase-text">"Pour protéger les deux parties, toutes les communications passent par nous. C'est aussi votre garantie que tout se passe dans les règles."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="standard-card" onclick="toggleStandard(this)">
+    <div class="standard-header">
+      ⚠️ "Quelle est votre commission exactement ?"
+      <span class="chevron">▼</span>
+    </div>
+    <div class="standard-body">
+      <div class="phrase-card" style="box-shadow:none; background:var(--cream); padding:12px;">
+        <div class="phrase-text">"Nos honoraires dépendent du type de transaction et du prix du bien. On en discute clairement lors de notre premier rendez-vous — pas de frais cachés, pas de surprise."</div>
+      </div>
+      <div class="info-box" style="margin-top:8px">
+        <strong>Ne jamais annoncer un chiffre sans contexte</strong>
+        Si la question persiste, demander à la direction avant de répondre.
+      </div>
+    </div>
+  </div>
+
+  <div class="standard-card" onclick="toggleStandard(this)">
+    <div class="standard-header">
+      ⚠️ "Est-ce que le bien a des problèmes juridiques ?"
+      <span class="chevron">▼</span>
+    </div>
+    <div class="standard-body">
+      <div class="phrase-card" style="box-shadow:none; background:var(--cream); padding:12px;">
+        <div class="phrase-text">"Tous les biens qu'on publie sont vérifiés en amont. Je peux vous donner le détail de la situation juridique de ce bien précis — un instant."</div>
+      </div>
+      <div class="info-box" style="margin-top:8px">
+        <strong>Important</strong>
+        Ne jamais improviser. Si vous ne savez pas, dire "je vérifie et je reviens vers vous dans la journée." C'est plus professionnel que d'inventer une réponse.
+      </div>
+    </div>
+  </div>
+
+  <div class="standard-card" onclick="toggleStandard(this)">
+    <div class="standard-header">
+      ⚠️ "Vous pensez que le vendeur accepterait [prix inférieur] ?"
+      <span class="chevron">▼</span>
+    </div>
+    <div class="standard-body">
+      <div class="phrase-card" style="box-shadow:none; background:var(--cream); padding:12px;">
+        <div class="phrase-text">"Je vais transmettre votre intérêt au propriétaire et voir quelle est sa marge de négociation. Je vous reviens rapidement."</div>
+      </div>
+      <div class="info-box" style="margin-top:8px">
+        <strong>Jamais</strong>
+        Ne jamais répondre "oui il acceptera" ou "non il n'acceptera pas" sans avoir consulté.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════ STANDARDS ═══════════════════════════════════ -->
+<div class="section" id="tab-standards">
+
+  <div class="section-header">
+    <div class="section-label">Fichier 2 · Section 4</div>
+    <div class="section-title">Standards Serenity Living</div>
+  </div>
+
+  <div class="standard-card" onclick="toggleStandard(this)">
+    <div class="standard-header">📞 Standards — Appels<span class="chevron">▼</span></div>
+    <div class="standard-body open">
+      <div class="standard-item green">Décrocher avant la 3e sonnerie</div>
+      <div class="standard-item green">Sourire avant de parler (ça s'entend)</div>
+      <div class="standard-item green">Toujours présenter son prénom</div>
+      <div class="standard-item green">Prendre des notes pendant l'appel</div>
+      <div class="standard-item green">Envoyer un message WhatsApp dans les 2h après</div>
+      <div class="standard-item red">Mettre en attente sans prévenir</div>
+      <div class="standard-item red">Raccrocher sans une prochaine étape concrète</div>
+      <div class="standard-item red">Parler d'un autre client ou d'un dossier en cours</div>
+    </div>
+  </div>
+
+  <div class="standard-card" onclick="toggleStandard(this)">
+    <div class="standard-header">💬 Standards — WhatsApp<span class="chevron">▼</span></div>
+    <div class="standard-body">
+      <div class="standard-item green">Répondre dans les 30 minutes en heures ouvrées</div>
+      <div class="standard-item green">Commencer par le prénom du client</div>
+      <div class="standard-item green">Écrire correctement — majuscules, ponctuation</div>
+      <div class="standard-item green">Messages courts et directs</div>
+      <div class="standard-item green">Maximum 1 emoji par message</div>
+      <div class="standard-item red">Abréviations (stp, bcp, pr, etc.)</div>
+      <div class="standard-item red">Messages vocaux non sollicités</div>
+      <div class="standard-item red">Envoyer une liste de biens sans avoir qualifié</div>
+      <div class="standard-item red">Répondre depuis un numéro personnel</div>
+    </div>
+  </div>
+
+  <div class="standard-card" onclick="toggleStandard(this)">
+    <div class="standard-header">🏠 Standards — Visites<span class="chevron">▼</span></div>
+    <div class="standard-body">
+      <div class="standard-item green">Arriver 10 minutes en avance</div>
+      <div class="standard-item green">Connaître le bien par cœur avant la visite</div>
+      <div class="standard-item green">Tenue professionnelle obligatoire</div>
+      <div class="standard-item green">Confirmer la visite la veille par WhatsApp</div>
+      <div class="standard-item green">Envoyer un message post-visite dans les 2h</div>
+      <div class="standard-item red">Arriver après le client</div>
+      <div class="standard-item red">Répondre au téléphone pendant la visite</div>
+      <div class="standard-item red">Laisser le client seul dans le bien</div>
+      <div class="standard-item red">Parler négativement du bien ou du quartier</div>
+    </div>
+  </div>
+
+  <div class="standard-card" onclick="toggleStandard(this)">
+    <div class="standard-header">🏢 Standards — Bureau<span class="chevron">▼</span></div>
+    <div class="standard-body">
+      <div class="standard-item green">Se lever pour accueillir un client</div>
+      <div class="standard-item green">Proposer café ou eau immédiatement</div>
+      <div class="standard-item green">Bureau rangé en permanence</div>
+      <div class="standard-item green">Téléphone retourné pendant l'entretien</div>
+      <div class="standard-item green">Remettre une carte de visite à la fin</div>
+      <div class="standard-item red">Manger au bureau en présence d'un client</div>
+      <div class="standard-item red">Conversations personnelles audibles</div>
+      <div class="standard-item red">Laisser un client attendre plus de 5 min sans explication</div>
+    </div>
+  </div>
+
+  <div class="standard-card" onclick="toggleStandard(this)">
+    <div class="standard-header">👔 Standards — Tenue & Image<span class="chevron">▼</span></div>
+    <div class="standard-body">
+      <div class="standard-item green">Tenue soignée, sobre, professionnelle</div>
+      <div class="standard-item green">Cohérente avec l'image premium de l'agence</div>
+      <div class="standard-item green">Parfum discret</div>
+      <div class="standard-item red">Tenue décontractée (jeans, baskets) lors des visites client</div>
+      <div class="standard-item red">Téléphone visible en réunion client</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════ POSITIONNEMENT ═══════════════════════════════════ -->
+<div class="section" id="tab-positionnement">
+
+  <div class="section-header">
+    <div class="section-label">Fichier 2 · Section 5</div>
+    <div class="section-title">Qui sommes-nous & pourquoi c'est important</div>
+  </div>
+
+  <div class="info-box" style="margin-bottom:16px">
+    <strong>À maîtriser par cœur</strong>
+    Savoir expliquer Serenity Living en 30 secondes, à n'importe qui, à n'importe quel moment. Ces éléments sont notre différence — pas des arguments de vente, une réalité.
+  </div>
+
+  <div class="positioning-block">
+    <div class="pb-title">Serenity Living en 4 phrases</div>
+    <div class="pb-point">On est une agence immobilière basée à Rabat — 24 Rue Jabal Toubkal, Agdal.</div>
+    <div class="pb-point">On couvre tout le couloir Rabat–Casablanca : 9 villes, de Kénitra à Casablanca.</div>
+    <div class="pb-point">Chaque bien qu'on publie est personnellement visité et vérifié juridiquement par notre équipe.</div>
+    <div class="pb-point">On accompagne nos clients de la première visite jusqu'à la remise des clés — et après.</div>
+  </div>
+
+  <div class="divider"><span>Nos vraies différences</span></div>
+
+  <div class="rule-card">
+    <div class="rule-title">✦ Ce qui nous distingue concrètement</div>
+    <div class="do-dont-grid">
+      <div class="do-col">
+        <div class="col-header">✔ Serenity Living</div>
+        <div class="col-item">Biens vérifiés juridiquement avant publication</div>
+        <div class="col-item">Conseiller dédié pour chaque client</div>
+        <div class="col-item">Photos & vidéos professionnelles</div>
+        <div class="col-item">Visite virtuelle 3D sur le site</div>
+        <div class="col-item">Investissement marketing pour les mandats exclusifs</div>
+        <div class="col-item">Contrats de bail + inventaires pour la location</div>
+        <div class="col-item">Couverture 9 villes Rabat–Casablanca</div>
+      </div>
+      <div class="dont-col">
+        <div class="col-header">❌ Agence classique</div>
+        <div class="col-item">Biens publiés sans vérification</div>
+        <div class="col-item">Standard anonyme, pas de suivi</div>
+        <div class="col-item">Photos téléphone</div>
+        <div class="col-item">Pas de visite virtuelle</div>
+        <div class="col-item">Pas d'investissement publicitaire</div>
+        <div class="col-item">Aucun support pour les contrats</div>
+        <div class="col-item">Couverture limitée</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"><span>Nos valeurs — à vivre, pas à réciter</span></div>
+
+  <div class="rule-card">
+    <div class="rule-title">🤫 Sérénité</div>
+    <div style="font-size:13px; line-height:1.6; color:var(--brun)">L'immobilier ne devrait pas être stressant. Notre rôle est de prendre en charge la complexité pour que le client avance l'esprit serein.</div>
+  </div>
+  <div class="rule-card">
+    <div class="rule-title">🔍 Confiance</div>
+    <div style="font-size:13px; line-height:1.6; color:var(--brun)">On dit ce qu'on pense vraiment — sur le prix, le délai, les risques. La transparence est notre standard, pas notre exception.</div>
+  </div>
+  <div class="rule-card">
+    <div class="rule-title">🏛 Excellence</div>
+    <div style="font-size:13px; line-height:1.6; color:var(--brun)">De la qualité de nos annonces à la rigueur de nos conseils, chaque détail compte. On ne fait pas les choses à moitié.</div>
+  </div>
+  <div class="rule-card">
+    <div class="rule-title">📍 Ancrage local</div>
+    <div style="font-size:13px; line-height:1.6; color:var(--brun)">Rabat et le couloir Rabat–Casa, c'est notre territoire. On le connaît mieux que n'importe qui.</div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════ KPI ═══════════════════════════════════ -->
+<div class="section" id="tab-kpi">
+
+  <div class="section-header">
+    <div class="section-label">Fichier 2 · Section 6</div>
+    <div class="section-title">Objectifs & indicateurs</div>
+  </div>
+
+  <div class="info-box" style="margin-bottom:16px">
+    <strong>Objectifs hebdomadaires par consultant</strong>
+    Ces chiffres sont des cibles, pas des plafonds. L'important est la qualité des leads, pas le volume.
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-number">10</div>
+      <div class="kpi-label">Leads acheteurs/locataires qualifiés</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-number">10</div>
+      <div class="kpi-label">Propriétaires contactés</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-number">5</div>
+      <div class="kpi-label">Visites organisées</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-number">1-2</div>
+      <div class="kpi-label">Mandats signés</div>
+    </div>
+  </div>
+
+  <div class="divider"><span>Règles de relance leads</span></div>
+
+  <div class="rule-card">
+    <div class="rule-title">📅 Fréquence selon le statut du lead</div>
+    <div class="standard-item green" style="border-bottom:1px solid var(--beige); padding:8px 0">Lead Nouveau → rappeler sous 48h</div>
+    <div class="standard-item green" style="border-bottom:1px solid var(--beige); padding:8px 0">Lead Contacté → relancer sous 7 jours</div>
+    <div class="standard-item green" style="border-bottom:1px solid var(--beige); padding:8px 0">Lead Chaud → suivre tous les 2-3 jours</div>
+    <div class="standard-item green" style="padding:8px 0">Lead Froid → message WhatsApp mensuel</div>
+  </div>
+
+  <div class="divider"><span>Ce qu'on mesure vraiment</span></div>
+
+  <div class="rule-card">
+    <div class="rule-title">📊 Indicateurs de qualité</div>
+    <div style="font-size:13px; line-height:1.8; color:var(--brun)">
+      ✔ Taux de réponse aux messages (objectif : 100% sous 30 min)<br>
+      ✔ Taux de transformation appel → visite<br>
+      ✔ Taux de satisfaction client post-transaction<br>
+      ✔ Nombre de mandats exclusifs signés<br>
+      ✔ Délai moyen entre mandat et transaction conclue
+    </div>
+  </div>
+
+  <div class="big-rule" style="margin-top:16px">
+    <div class="big-rule-title">Rappel final</div>
+    <div style="font-size:14px; line-height:1.7; color:var(--cream); font-style:italic">
+      "On ne mesure pas notre succès en nombre de transactions. On le mesure dans la satisfaction de chaque client qu'on a accompagné."
+    </div>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+function showTab(tab) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.closest('.tab-btn').classList.add('active');
+}
+
+function toggleStandard(card) {
+  const body = card.querySelector('.standard-body');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  card.classList.toggle('open', !isOpen);
+}
+</script>
+</body>
+</html>
